@@ -3,10 +3,10 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-  res.render('index', {
-    title: 'Express' 
+  res.render('admin', {
+    title: 'Admin Panel' 
   });
- 
+
 });
 
 module.exports = router;

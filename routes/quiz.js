@@ -3,10 +3,10 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-  res.render('index', {
-    title: 'Express' 
+  res.render('quiz', {
+    title: 'Quiz' 
   });
- 
+
 });
 
 module.exports = router;
