@@ -7,7 +7,7 @@ a {
   color: #00B7FF;
 }
 
-a.active{
+a.active {
+  font-size: 1.2rem;
   font-weight: bold;
-  color: purple;
 }

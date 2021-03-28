@@ -1,27 +1,57 @@
+const config = require('./config');
 var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const cookieSession = require('cookie-session');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const db = mongoose.connection;
 
-var indexRouter = require('./routes/index');
-var newsRouter = require('./routes/news');
-var quizRouter = require('./routes/quiz');
-var adminRouter = require('./routes/admin');
 
-var app = express();
+try {
+  mongoose.connect(config.db, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+  })
+  console.log('db connect');
+  
+} catch (error) {
+  throw new Error(error, 'błąd połączenia');
+}
+
+
+
+
+const indexRouter = require('./routes/index');
+const newsRouter = require('./routes/news');
+const quizRouter = require('./routes/quiz');
+const adminRouter = require('./routes/admin');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(cookieSession({
+
+  name: 'session',
+  keys: config.keySession,
+  maxAge: config.maxAgeSession
+
+}));
+
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req,res,next){ 
+app.use(function (req, res, next) {
 
   res.locals.path = req.path;
 
@@ -36,12 +66,12 @@ app.use('/admin', adminRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
