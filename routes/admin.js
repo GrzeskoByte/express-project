@@ -50,8 +50,6 @@ router.get('/news/delete/:id', (req, res) => {
 })
 
 
-
-
 router.post('/news/add', (req, res) => {
 
   const body = req.body;
